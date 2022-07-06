@@ -1,0 +1,31 @@
+name: build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install valentine
+      run: pip install .
+
+    - name: install coverage
+      run: pip install coverage
+
+    - name: run tests
+      run: coverage run --source=valentine -m unittest discover tests
+
+    - name: Generate coverage report
+      run: coverage xml
+
+    - name: "Upload coverage to Codecov"
+      uses: codecov/codecov-action@v1
